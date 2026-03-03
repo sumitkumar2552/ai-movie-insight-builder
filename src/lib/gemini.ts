@@ -42,12 +42,7 @@
 
 
 
-
 import Groq from "groq-sdk";
-
-const client = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
 
 export async function analyzeSentiment(reviews: string[]) {
   try {
@@ -55,10 +50,15 @@ export async function analyzeSentiment(reviews: string[]) {
       return "No reviews available to analyze.";
     }
 
+    // 🔹 Move client creation INSIDE function
+    const client = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    });
+
     const prompt = `
 Analyze the following audience reviews.
 
-1. Provide a short summary (7-8 lines).
+1. Provide a short summary (6-7 lines).
 2. Then strictly classify overall sentiment as one word only:
    Positive
    Mixed
@@ -69,19 +69,21 @@ If balanced, choose Mixed.
 If majority praise, choose Positive.
 
 Return plain text only.
+
+Reviews:
 ${reviews.join("\n\n")}
 `;
 
     const completion = await client.chat.completions.create({
-  model: "llama-3.1-8b-instant",
-  messages: [
-    { role: "system", content: "You are a movie sentiment analyst." },
-    { role: "user", content: prompt },
-  ],
-  temperature: 0.7,
-});
+      model: "llama-3.1-8b-instant",
+      messages: [
+        { role: "system", content: "You are a movie sentiment analyst." },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.5,
+    });
 
-    return completion.choices[0].message.content || "Analysis failed.";
+    return completion.choices[0]?.message?.content || "Analysis failed.";
   } catch (error) {
     console.error("Groq Error:", error);
     return "Sentiment analysis failed.";
