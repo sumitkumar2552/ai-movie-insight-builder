@@ -43,11 +43,10 @@
 
 
 
-import OpenAI from "openai";
+import Groq from "groq-sdk";
 
-const client = new OpenAI({
+const client = new Groq({
   apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
 });
 
 export async function analyzeSentiment(reviews: string[]) {
