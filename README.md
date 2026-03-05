@@ -7,7 +7,7 @@ Enter an IMDb ID to fetch movie details and get AI-generated audience sentiment 
 
 ## 🌐 Live Demo
 
-🔗 https://your-vercel-link.vercel.app
+🔗 https://ai-movie-insight-builder-433v.vercel.app/
 
 
 ---
